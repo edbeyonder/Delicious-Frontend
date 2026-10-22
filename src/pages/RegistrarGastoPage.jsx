@@ -12,10 +12,13 @@ function RegistrarGastoPage() {
     e.preventDefault();
 
     try {
-      await axios.post("http://localhost:8080/api/gasto", {
-        precio: parseFloat(valor),
-        descripcionGasto: descripcionGasto,
-      });
+      await axios.post(
+        "https://delicious-backend-uwql.onrender.com/api/gasto",
+        {
+          precio: parseFloat(valor),
+          descripcionGasto: descripcionGasto,
+        },
+      );
 
       alert("✅ Gasto registrado correctamente");
 
