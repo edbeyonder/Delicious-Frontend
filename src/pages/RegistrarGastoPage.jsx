@@ -1,21 +1,33 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function RegistrarGastoPage() {
   const navigate = useNavigate();
 
   const [valor, setValor] = useState("");
-  const [descripcion, setDescripcion] = useState("");
+  const [descripcionGasto, setDescripcionGasto] = useState("");
 
-  const registrarGasto = (e) => {
+  const registrarGasto = async (e) => {
     e.preventDefault();
 
-    // Por ahora solamente visual.
-    // Posteriormente aquí irá axios.post().
-    alert("✅ Gasto registrado correctamente");
+    try {
+      await axios.post("http://localhost:8080/api/gasto", {
+        precio: parseFloat(valor),
+        descripcionGasto: descripcionGasto,
+      });
 
-    setValor("");
-    setDescripcion("");
+      alert("✅ Gasto registrado correctamente");
+
+      setValor("");
+      setDescripcionGasto("");
+
+      navigate("/gastos/nuevo");
+    } catch (error) {
+      console.error("Error al registrar el gasto:", error);
+
+      alert("❌ No se pudo registrar el gasto");
+    }
   };
 
   return (
@@ -49,9 +61,9 @@ function RegistrarGastoPage() {
 
             <input
               type="text"
-              value={descripcion}
-              onChange={(e) => setDescripcion(e.target.value)}
-              maxLength="50"
+              value={descripcionGasto}
+              onChange={(e) => setDescripcionGasto(e.target.value)}
+              maxLength="75"
               required
             />
           </div>

@@ -1,32 +1,29 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import TablaVentas from "../components/TablaVentas";
 
 function VerVentasPage() {
+  const [ventas, setVentas] = useState([]);
   const navigate = useNavigate();
 
-  // Datos de ejemplo solamente para la interfaz.
-  // Después serán reemplazados por datos de la API.
-  const [ventas] = useState([
-    {
-      idVenta: 1,
-      fecha: "09/08/2026",
-      total: 25000,
-    },
-    {
-      idVenta: 2,
-      fecha: "09/08/2026",
-      total: 18000,
-    },
-    {
-      idVenta: 3,
-      fecha: "10/08/2026",
-      total: 32000,
-    },
-  ]);
+  const cargarVentas = () => {
+    axios
+      .get("http://localhost:8080/api/venta")
+      .then((response) => {
+        setVentas(response.data);
+      })
+      .catch((error) => {
+        console.error("Error al cargar las ventas:", error);
+      });
+  };
+
+  useEffect(() => {
+    cargarVentas();
+  }, []);
 
   return (
-    <main className="ventas-page">
+    <div className="container mt-4">
       <button
         type="button"
         className="btn-regresar"
@@ -35,12 +32,10 @@ function VerVentasPage() {
         ← Regresar
       </button>
 
-      <div className="ventas-contenido">
-        <h1>Ventas</h1>
+      <h2>Ventas registradas</h2>
 
-        <TablaVentas ventas={ventas} />
-      </div>
-    </main>
+      <TablaVentas ventas={ventas} onVentaEliminada={cargarVentas} />
+    </div>
   );
 }
 

@@ -1,10 +1,14 @@
 import { useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 function Navbar() {
+  const navigate = useNavigate();
   const [ventasAbierto, setVentasAbierto] = useState(false);
   const [gastosAbierto, setGastosAbierto] = useState(false);
   const [inventarioAbierto, setInventarioAbierto] = useState(false);
-
+  const cerrarSesion = () => {
+    sessionStorage.removeItem("sesionIniciada");
+    navigate("/");
+  };
   return (
     <aside className="sidebar">
       <h2>DELICIOUS</h2>
@@ -57,10 +61,9 @@ function Navbar() {
           <a href="/inventario">Ver Inventario</a>
         </div>
       )}
-
-      <a href="/" className="acceso">
+      <button onClick={cerrarSesion} className="acceso">
         🚪 Cerrar sesión
-      </a>
+      </button>
     </aside>
   );
 }
